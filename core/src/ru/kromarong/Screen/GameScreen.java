@@ -1,5 +1,7 @@
 package ru.kromarong.screen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -7,7 +9,10 @@ import com.badlogic.gdx.math.Vector2;
 
 
 import ru.kromarong.base.BaseScreen;
+import ru.kromarong.base.EnemiesControl;
 import ru.kromarong.math.Rect;
+import ru.kromarong.pool.BulletPool;
+import ru.kromarong.pool.EnemyShipPool;
 import ru.kromarong.sprite.Background;
 import ru.kromarong.sprite.Ship;
 import ru.kromarong.sprite.Star;
@@ -16,23 +21,30 @@ public class GameScreen extends BaseScreen {
 
     private Ship ship;
     private Texture bg;
-    private Texture shipImg;
     private Background background;
     private TextureAtlas atlas;
     private Star starList[];
+    private BulletPool bulletPool;
+    private EnemyShipPool enemyPool;
+    private EnemiesControl enemiesControl;
+    private Music music;
 
     @Override
     public void show() {
         super.show();
         bg = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bg));
-        shipImg = new Texture("textures/ship.png");
-        ship = new Ship(new TextureRegion(shipImg));
-        atlas = new TextureAtlas("textures/menuAtlas.tpack");
-        starList = new Star[256];
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        bulletPool = new BulletPool();
+        ship = new Ship(atlas,bulletPool);
+        enemyPool = new EnemyShipPool();
+        enemiesControl = new EnemiesControl(enemyPool, atlas, worldBounds);
+        starList = new Star[64];
         for (int i = 0; i < starList.length; i++) {
             starList[i] = new Star(atlas);
         }
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        music.play();
     }
 
     @Override
@@ -49,6 +61,7 @@ public class GameScreen extends BaseScreen {
     public void render(float delta) {
         super.render(delta);
         update(delta);
+        freeAllDestroyedSprites();
         draw();
     }
 
@@ -56,7 +69,15 @@ public class GameScreen extends BaseScreen {
         for (Star star : starList) {
             star.update(delta);
         }
+        enemiesControl.update(delta);
+        enemyPool.updateActiveSprites(delta);
         ship.update(delta);
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void freeAllDestroyedSprites() {
+        bulletPool.freeAllDestroyedActiveSprites();
+        enemyPool.freeAllDestroyedActiveSprites();
     }
 
     private void draw() {
@@ -66,6 +87,8 @@ public class GameScreen extends BaseScreen {
             star.draw(batch);
         }
         ship.draw(batch);
+        bulletPool.drawActiveSprites(batch);
+        enemyPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -73,13 +96,32 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         super.dispose();
         bg.dispose();
-        shipImg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
+        enemyPool.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        ship.keyDown(keycode);
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        ship.keyUp(keycode);
+        return false;
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        ship.touchDown(touch,pointer);
-        return super.touchDown(touch, pointer);
+        ship.touchDown(touch, pointer);
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        ship.touchUp(touch, pointer);
+        return false;
     }
 }
