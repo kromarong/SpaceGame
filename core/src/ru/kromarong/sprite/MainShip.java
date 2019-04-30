@@ -2,12 +2,15 @@ package ru.kromarong.sprite;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.kromarong.base.Ship;
 import ru.kromarong.math.Rect;
 import ru.kromarong.pool.BulletPool;
+import ru.kromarong.pool.ExplosionPool;
 
 public class MainShip extends Ship {
 
@@ -19,10 +22,12 @@ public class MainShip extends Ship {
     private int rightPointer = INVALID_POINTER;
     private int leftPointer = INVALID_POINTER;
 
-    public MainShip(TextureAtlas atlas, BulletPool bulletPool, Sound shootSound) {
+
+    public MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("bulletMainShip");
+        this.explosionPool = explosionPool;
         this.shootSound = shootSound;
         setHeightProportion(0.15f);
         this.reloadInterval = 0.2f;
@@ -137,6 +142,14 @@ public class MainShip extends Ship {
             }
         }
         return false;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+        );
     }
 
     private void moveRight() {

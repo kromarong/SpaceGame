@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.kromarong.base.Ship;
-import ru.kromarong.base.Sprite;
 import ru.kromarong.math.Rect;
 import ru.kromarong.pool.BulletPool;
+import ru.kromarong.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
     private enum State {DESCENT, FIGHT}
@@ -16,9 +16,10 @@ public class EnemyShip extends Ship {
 
     private MainShip mainShip;
 
-    public EnemyShip(BulletPool bulletPool, Sound shootSound, Rect worldBounds, MainShip mainShip) {
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds, MainShip mainShip) {
         this.mainShip = mainShip;
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.shootSound = shootSound;
         this.descentV = new Vector2(0, -0.3f);
@@ -66,5 +67,13 @@ public class EnemyShip extends Ship {
         v.set(descentV);
         reloadTimer = reloadInterval;
         state = State.DESCENT;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > getTop()
+                || bullet.getTop() < pos.y
+        );
     }
 }
