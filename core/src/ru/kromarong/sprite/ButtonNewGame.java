@@ -17,8 +17,8 @@ public class ButtonNewGame extends ScaledTouchUpButton {
         this.mainShip = mainShip;
 
         setHeightProportion(0.08f);
-        setBottom(worldBounds.getHalfHeight() - 0.25f);
-        setLeft(worldBounds.getLeft() - 0.26f);
+        setBottom(-0.25f);
+        setLeft(-0.26f);
 
     }
 
