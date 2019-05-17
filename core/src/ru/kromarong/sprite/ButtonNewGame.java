@@ -28,6 +28,7 @@ public class ButtonNewGame extends ScaledTouchUpButton {
         mainShip.flushDestroy();
         mainShip.pos.x = 0f;
         screen.freeAllActiveSprites();
+        screen.setFragsToZero();
         screen.setStatePlaying();
     }
 

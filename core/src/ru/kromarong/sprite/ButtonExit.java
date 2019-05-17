@@ -11,15 +11,15 @@ import ru.kromarong.math.Rect;
 public class ButtonExit extends ScaledTouchUpButton {
 
     public ButtonExit(TextureAtlas atlas) {
-        super(atlas.findRegion("btExit"));
-        setHeightProportion(0.15f);
+        super(atlas.findRegion("button_exit"));
+        setHeightProportion(0.12f);
     }
 
     @Override
     public void resize(Rect worldBounds) {
         super.resize(worldBounds);
-        setBottom(worldBounds.getBottom() + 0.02f);
-        setRight(worldBounds.getRight() - 0.02f);
+        setBottom(worldBounds.getBottom() + getHeight());
+        setRight(getHalfWidth());
     }
 
     @Override

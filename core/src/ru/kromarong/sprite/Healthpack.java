@@ -1,5 +1,6 @@
 package ru.kromarong.sprite;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -11,8 +12,8 @@ public class Healthpack extends Sprite {
     private Vector2 v;
     private Rect worldBounds;
 
-    public Healthpack(TextureRegion region, Rect worldBounds) {
-        super(region);
+    public Healthpack(TextureAtlas atlas, Rect worldBounds) {
+        super(atlas.findRegion("healthpack"));
         this.worldBounds = worldBounds;
         float vx = Rnd.nextFloat(-0.001f, 0.001f);
         float vy = Rnd.nextFloat(-0.08f, -0.081f);

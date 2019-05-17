@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.kromarong.base.ObjectGenerator;
 import ru.kromarong.base.Ship;
 import ru.kromarong.math.Rect;
 import ru.kromarong.pool.BulletPool;
@@ -14,14 +15,17 @@ public class EnemyShip extends Ship {
     private State state;
     private Vector2 descentV;
 
-    private MainShip mainShip;
+    public enum Type {SMALL, MEDIUM, BIG}
+    public Type type;
 
-    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds, MainShip mainShip) {
-        this.mainShip = mainShip;
+    private ObjectGenerator objectGenerator;
+
+    public EnemyShip(BulletPool bulletPool, ExplosionPool explosionPool, Sound shootSound, Rect worldBounds, ObjectGenerator objectGenerator) {
         this.bulletPool = bulletPool;
         this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.shootSound = shootSound;
+        this.objectGenerator = objectGenerator;
         this.descentV = new Vector2(0, -0.3f);
     }
 
@@ -44,6 +48,12 @@ public class EnemyShip extends Ship {
         }
     }
 
+    @Override
+    public void destroy() {
+        super.destroy();
+        objectGenerator.generate(this);
+    }
+
     public void set(
             TextureRegion[] regions,
             Vector2 v0,
@@ -53,7 +63,8 @@ public class EnemyShip extends Ship {
             int bulletDamage,
             float reloadInterval,
             float height,
-            int hp
+            int hp,
+            Type type
     ) {
         this.regions = regions;
         this.v0.set(v0);
@@ -64,6 +75,7 @@ public class EnemyShip extends Ship {
         this.reloadInterval = reloadInterval;
         setHeightProportion(height);
         this.hp = hp;
+        this.type = type;
         v.set(descentV);
         reloadTimer = reloadInterval;
         state = State.DESCENT;
@@ -75,5 +87,9 @@ public class EnemyShip extends Ship {
                 || bullet.getBottom() > getTop()
                 || bullet.getTop() < pos.y
         );
+    }
+
+    public Type getType() {
+        return type;
     }
 }
