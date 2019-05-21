@@ -1,6 +1,6 @@
 package ru.kromarong.sprite;
 
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 import ru.kromarong.base.Sprite;
 import ru.kromarong.math.Rect;
@@ -9,11 +9,11 @@ public class HealthBar extends Sprite {
 
     private MainShip mainShip;
 
-    public HealthBar(TextureRegion region, MainShip mainShip, Rect worldBounds) {
-        super(region, 6,1,6);
+    public HealthBar(TextureAtlas atlas, MainShip mainShip, Rect worldBounds) {
+        super(atlas.findRegion("health_bar"), 6,1,6);
         this.mainShip = mainShip;
         setHeightProportion(0.05f);
-        setLeft(worldBounds.getLeft() - 0.36f);
+        setRight(worldBounds.getLeft() - getWidth());
         setTop(worldBounds.getTop() + 0.48f);
     }
 
