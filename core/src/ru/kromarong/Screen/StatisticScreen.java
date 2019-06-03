@@ -1,12 +1,18 @@
 package ru.kromarong.screen;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Align;
 
 import ru.kromarong.base.BaseScreen;
-import ru.kromarong.sprite.Star;
+import ru.kromarong.math.Rect;
+import ru.kromarong.sprite.Background;
 import ru.kromarong.utils.Font;
 
 public class StatisticScreen extends BaseScreen {
+
+    private Texture bg;
+    private Background background;
 
     private int frags = 0;
     private int smallFrags = 0;
@@ -37,8 +43,16 @@ public class StatisticScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        bg = new Texture("textures/background.png");
+        background = new Background(new TextureRegion(bg));
         font = new Font("font/font.fnt", "font/font.png");
-        font.setFontSize(0.015f);
+        font.setFontSize(0.025f);
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
     }
 
     @Override
@@ -49,19 +63,26 @@ public class StatisticScreen extends BaseScreen {
 
     public void draw(){
         batch.begin();
-        printInfo();
+        background.draw(batch);
+        printStatistic();
         batch.end();
     }
-    private void printInfo() {
+    private void printStatistic() {
         sbSmallFrags.setLength(0);
         sbMediumFrags.setLength(0);
         sbBigFrags.setLength(0);
         sbRepairKit.setLength(0);
 
-        font.draw(batch, sbSmallFrags.append(SMALL_FRAGS).append(smallFrags), worldBounds.getLeft(), worldBounds.getBottom() + 1f, Align.left);
-        font.draw(batch, sbMediumFrags.append(MEDIUM_FRAGS).append(mediumFrags), worldBounds.getLeft(), worldBounds.getBottom() + 0.80f, Align.left);
-        font.draw(batch, sbBigFrags.append(BIG_FRAGS).append(bigFrags), worldBounds.getLeft(), worldBounds.getBottom() + 0.60f, Align.left);
-        font.draw(batch, sbRepairKit.append(REPAIR_KIT).append(repairKit), worldBounds.getLeft(), worldBounds.getBottom() + 0.40f, Align.left);
+        font.draw(batch, sbSmallFrags.append(SMALL_FRAGS).append(smallFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.7f, Align.center);
+        font.draw(batch, sbMediumFrags.append(MEDIUM_FRAGS).append(mediumFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.6f, Align.center);
+        font.draw(batch, sbBigFrags.append(BIG_FRAGS).append(bigFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.5f, Align.center);
+        font.draw(batch, sbRepairKit.append(REPAIR_KIT).append(repairKit), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.4f, Align.center);
 
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        bg.dispose();
     }
 }

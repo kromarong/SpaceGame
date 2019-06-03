@@ -5,36 +5,36 @@ filter: Nearest,Nearest
 repeat: none
 buton_retry
   rotate: false
-  xy: 1, 245
-  size: 400, 120
-  orig: 400, 120
+  xy: 1, 693
+  size: 421, 171
+  orig: 421, 171
   offset: 0, 0
   index: -1
 button_continue
   rotate: false
-  xy: 1, 123
-  size: 400, 120
-  orig: 400, 120
+  xy: 1, 520
+  size: 421, 171
+  orig: 421, 171
   offset: 0, 0
   index: -1
 button_exit
   rotate: false
-  xy: 403, 245
-  size: 400, 120
-  orig: 400, 120
+  xy: 1, 347
+  size: 421, 171
+  orig: 421, 171
   offset: 0, 0
   index: -1
 button_game_over
   rotate: false
-  xy: 1, 1
-  size: 400, 120
-  orig: 400, 120
+  xy: 1, 174
+  size: 421, 171
+  orig: 421, 171
   offset: 0, 0
   index: -1
 button_new_game
   rotate: false
-  xy: 403, 123
-  size: 400, 120
-  orig: 400, 120
+  xy: 1, 1
+  size: 421, 171
+  orig: 421, 171
   offset: 0, 0
   index: -1

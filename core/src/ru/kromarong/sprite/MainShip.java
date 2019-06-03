@@ -2,9 +2,7 @@ package ru.kromarong.sprite;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.kromarong.base.Ship;
@@ -35,7 +33,7 @@ public class MainShip extends Ship {
         this.bulletHeight = 0.015f;
         this.damage = 1;
         this.v0.set(0.5f, 0);
-        this.hp = 30;
+        this.hp = 33;
     }
 
     @Override

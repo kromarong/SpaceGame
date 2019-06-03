@@ -5,98 +5,63 @@ filter: Nearest,Nearest
 repeat: none
 main_ship
   rotate: false
-  xy: 1, 1025
+  xy: 1, 1
   size: 1496, 1021
   orig: 1496, 1021
   offset: 0, 0
   index: -1
-explosion
-  rotate: false
-  xy: 1, 123
-  size: 900, 900
-  orig: 900, 900
-  offset: 0, 0
-  index: -1
-enemy4
-  rotate: false
-  xy: 903, 597
-  size: 838, 426
-  orig: 838, 426
-  offset: 0, 0
-  index: -1
-enemy2
-  rotate: false
-  xy: 903, 245
-  size: 780, 350
-  orig: 780, 350
-  offset: 0, 0
-  index: -1
 enemy1
   rotate: false
-  xy: 1499, 1746
+  xy: 1499, 722
   size: 500, 300
   orig: 500, 300
   offset: 0, 0
   index: -1
 enemy3
   rotate: false
-  xy: 1499, 1444
+  xy: 1499, 420
   size: 500, 300
   orig: 500, 300
   offset: 0, 0
   index: -1
 enemy0
   rotate: false
-  xy: 1499, 1092
+  xy: 1499, 68
   size: 390, 350
   orig: 390, 350
   offset: 0, 0
   index: -1
-enemy5
-  rotate: false
-  xy: 903, 6
-  size: 426, 237
-  orig: 426, 237
-  offset: 0, 0
-  index: -1
-boss
-  rotate: false
-  xy: 1685, 280
-  size: 332, 315
-  orig: 332, 315
-  offset: 0, 0
-  index: -1
 rocket
   rotate: false
-  xy: 1, 1
+  xy: 1891, 298
   size: 68, 120
   orig: 68, 120
   offset: 0, 0
   index: -1
 double_shots
   rotate: false
-  xy: 1499, 1035
+  xy: 2001, 967
   size: 45, 55
   orig: 45, 55
   offset: 0, 0
   index: -1
 shot
   rotate: false
-  xy: 1331, 188
+  xy: 1499, 11
   size: 18, 55
   orig: 18, 55
   offset: 0, 0
   index: -1
 bulletEnemy
   rotate: false
-  xy: 1685, 248
+  xy: 1891, 266
   size: 30, 30
   orig: 30, 30
   offset: 0, 0
   index: -1
 bulletMainShip
   rotate: false
-  xy: 2001, 2026
+  xy: 1961, 398
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -106,10 +71,38 @@ mainAtlas2.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-health_bar
+explosion
   rotate: false
-  xy: 1, 1
-  size: 710, 1160
-  orig: 710, 1160
+  xy: 1, 118
+  size: 900, 900
+  orig: 900, 900
+  offset: 0, 0
+  index: -1
+enemy4
+  rotate: false
+  xy: 903, 592
+  size: 838, 426
+  orig: 838, 426
+  offset: 0, 0
+  index: -1
+enemy2
+  rotate: false
+  xy: 903, 240
+  size: 780, 350
+  orig: 780, 350
+  offset: 0, 0
+  index: -1
+enemy5
+  rotate: false
+  xy: 903, 1
+  size: 426, 237
+  orig: 426, 237
+  offset: 0, 0
+  index: -1
+enemy6
+  rotate: false
+  xy: 1685, 275
+  size: 332, 315
+  orig: 332, 315
   offset: 0, 0
   index: -1
