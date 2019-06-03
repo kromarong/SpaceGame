@@ -18,7 +18,7 @@ public class Shield extends Sprite {
         this.v = new Vector2();
         this.mainShip = mainShip;
         this.level = level;
-        this.hp = Math.round(10 * (level * 0.7f));
+        this.hp = 0;
         setHeightProportion(mainShip.getHeight() + 0.02f);
     }
 
@@ -40,7 +40,7 @@ public class Shield extends Sprite {
     }
 
     public void setDefaultHp() {
-        this.hp = Math.round(10 * (level * 0.7f));
+        this.hp = Math.round(10);
     }
 
     public void damage (int damage){

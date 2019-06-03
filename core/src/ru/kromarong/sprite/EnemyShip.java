@@ -15,7 +15,11 @@ public class EnemyShip extends Ship {
     private State state;
     private Vector2 descentV;
 
-    public enum Type {SMALL, MEDIUM, BIG}
+    private boolean horizontalMove = false;
+    private float moveTimer;
+    private float moveInterval = 1f;
+
+    public enum Type {SMALL, MEDIUM, BIG, BOSS}
     public Type type;
 
     private ObjectGenerator objectGenerator;
@@ -32,7 +36,7 @@ public class EnemyShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
-        if (getTop() <= worldBounds.getTop()) {
+        if (getTop() <= worldBounds.getTop() && state == state.DESCENT) {
             state = State.FIGHT;
             v.set(v0);
         }
@@ -45,6 +49,29 @@ public class EnemyShip extends Ship {
         }
         if (isOutside(worldBounds)) {
             destroy();
+        }
+        if (horizontalMove == true){
+            moveTimer += delta;
+            if (getRight() > worldBounds.getRight()) {
+                setRight(worldBounds.getRight());
+                stop();
+            }
+            if (getLeft() < worldBounds.getLeft()) {
+                setLeft(worldBounds.getLeft());
+                stop();
+            }
+            if (moveTimer >= moveInterval){
+                float direction = (float) Math.random();
+                if (direction <= 0.3f){
+                    moveLeft();
+                } else if (direction <= 0.6f){
+                    moveRight();
+                } else {
+                    stop();
+                }
+                moveTimer = 0f;
+            }
+
         }
     }
 
@@ -89,7 +116,27 @@ public class EnemyShip extends Ship {
         );
     }
 
+    public void startMoveHorizontal(){
+        horizontalMove = true;
+    }
+
+    private void moveRight() {
+        v.set(0.2f, v.y);
+    }
+
+    private void moveLeft() {
+        v.set(-0.2f, v.y);
+    }
+
+    private void stop() {
+        v.set(0, v.y);
+    }
+
     public Type getType() {
         return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }

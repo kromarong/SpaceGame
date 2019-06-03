@@ -11,6 +11,7 @@ import ru.kromarong.sprite.EnemyShip;
 import ru.kromarong.utils.Regions;
 
 import static ru.kromarong.sprite.EnemyShip.Type.BIG;
+import static ru.kromarong.sprite.EnemyShip.Type.BOSS;
 import static ru.kromarong.sprite.EnemyShip.Type.MEDIUM;
 import static ru.kromarong.sprite.EnemyShip.Type.SMALL;
 
@@ -34,14 +35,14 @@ public class EnemyGenerator {
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
     private static final float ENEMY_BIG_BULLET_VY = -0.3f;
     private static final int ENEMY_BIG_DAMAGE = 8;
-    private static final float ENEMY_BIG_RELOAD_INTERVAL = 1f;
+    private static final float ENEMY_BIG_RELOAD_INTERVAL = 2f;
     private static final int ENEMY_BIG_HP = 10;
 
     private static final float ENEMY_BOSS_HEIGHT = 0.2f;
     private static final float ENEMY_BOSS_BULLET_HEIGHT = 0.04f;
     private static final float ENEMY_BOSS_BULLET_VY = -0.3f;
     private static final int ENEMY_BOSS_DAMAGE = 8;
-    private static final float ENEMY_BOSS_RELOAD_INTERVAL = 1f;
+    private static final float ENEMY_BOSS_RELOAD_INTERVAL = 2f;
     private static final int ENEMY_BOSS_HP = 30;
 
     private Rect worldBounds;
@@ -64,6 +65,8 @@ public class EnemyGenerator {
 
     private final EnemyShipPool enemyPool;
 
+    private EnemyShip enemyBoss;
+
     private int level;
     private int damage_modifier;
     private int hp_modifier;
@@ -75,7 +78,7 @@ public class EnemyGenerator {
         this.enemyMediumRegion = Regions.split(enemy1, 1, 2, 2);
         TextureRegion enemy2 = atlas.findRegion("enemy2");
         this.enemyBigRegion = Regions.split(enemy2, 1, 2, 2);
-        TextureRegion boss = atlas.findRegion("boss");
+        TextureRegion boss = atlas.findRegion("enemy5");
         this.enemyBossRegion = Regions.split(boss, 1, 2, 2);
         this.bulletBossRegion = atlas.findRegion("rocket");
         this.bulletRegion = atlas.findRegion("bulletEnemy");
@@ -150,10 +153,18 @@ public class EnemyGenerator {
                 ENEMY_BOSS_HP * hp_modifier,
                 BIG
         );
+        enemyShip.setType(BOSS);
         enemyShip.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemyShip.getHalfWidth(),
                 worldBounds.getRight() - enemyShip.getHalfWidth());
         enemyShip.setBottom(worldBounds.getTop());
+        enemyShip.startMoveHorizontal();
     }
+
+    public void moveBoss(float delta){
+
+    }
+
+
     public int getLevel() {
         return level;
     }

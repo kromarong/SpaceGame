@@ -30,6 +30,7 @@ import ru.kromarong.sprite.HealthBar;
 import ru.kromarong.sprite.Healthpack;
 import ru.kromarong.sprite.MainShip;
 import ru.kromarong.sprite.Shield;
+import ru.kromarong.sprite.ShieldBar;
 import ru.kromarong.sprite.ShieldCase;
 import ru.kromarong.sprite.Star;
 import ru.kromarong.sprite.TrackingStar;
@@ -41,13 +42,17 @@ public class GameScreen extends BaseScreen {
 
     private static final String FRAGS = "Frags: ";
     private static final String LEVEL = "Level: ";
+    private static final String SMALL_FRAGS = "Small ship destroyed: ";
+    private static final String MEDIUM_FRAGS = "Medium ship destroyed: ";
+    private static final String BIG_FRAGS = "Big ship destroyed: ";
+    private static final String REPAIR_KIT = "Repair kit get: ";
 
-    private enum State {PLAYING, PAUSE, GAME_OVER, BOSS_FIGHT, LEVEL_COMPLETE}
-    private enum ShieldState {ENABLED, DISABLED}
+    private enum State {PLAYING, PAUSE, GAME_OVER, LEVEL_COMPLETE}
+
     private boolean bossFightState = false;
 
     private State state;
-    private ShieldState shieldState;
+    private boolean shieldState;
 
     private Texture bg;
     private Background background;
@@ -62,6 +67,7 @@ public class GameScreen extends BaseScreen {
     private MainShip mainShip;
     private HealthBar healthBar;
     private Shield shield;
+    private ShieldBar shieldBar;
 
     private BulletPool bulletPool;
     private EnemyShipPool enemyShipPool;
@@ -80,12 +86,18 @@ public class GameScreen extends BaseScreen {
     private Font font;
     private StringBuilder sbFrags = new StringBuilder();
     private StringBuilder sbLevel = new StringBuilder();
+    private StringBuilder sbSmallFrags = new StringBuilder();
+    private StringBuilder sbMediumFrags = new StringBuilder();
+    private StringBuilder sbBigFrags = new StringBuilder();
+    private StringBuilder sbRepairKit = new StringBuilder();
 
     private int frags = 0;
     private int smallFrags = 0;
     private int mediumFrags = 0;
     private int bigFrags = 0;
     private int repairKit = 0;
+
+    private float delayScreen = 0;
 
     private int level;
 
@@ -124,7 +136,12 @@ public class GameScreen extends BaseScreen {
         shieldCasePool = new ShieldCasePool(objectAtlas, worldBounds);
         objectGenerator = new ObjectGenerator(healthpackPool, shieldCasePool, worldBounds);
 
-        healthBar = new HealthBar(mainAtlas, mainShip, worldBounds);
+        Texture hp_bar = new Texture("textures/UI/HealthBar.png");
+        TextureRegion hpBar = new TextureRegion(hp_bar);
+        healthBar = new HealthBar(hpBar, mainShip, worldBounds);
+        Texture sh_bar = new Texture("textures/UI/ShieldBar.png");
+        TextureRegion shBar = new TextureRegion(sh_bar);
+        shieldBar = new ShieldBar(shBar, shield, worldBounds);
         enemyShipPool = new EnemyShipPool(bulletPool, explosionPool, bulletSound, worldBounds, objectGenerator);
         enemyGenerator = new EnemyGenerator(mainAtlas, enemyShipPool, worldBounds);
         enemyGenerator.setLevel(level);
@@ -139,7 +156,7 @@ public class GameScreen extends BaseScreen {
         newGame = new ButtonNewGame(menuAtlas, worldBounds, mainShip, this);
         font = new Font("font/font.fnt", "font/font.png");
         font.setFontSize(0.03f);
-        shieldState = ShieldState.ENABLED;
+        shieldState = false;
         state = State.PLAYING;
     }
 
@@ -157,12 +174,13 @@ public class GameScreen extends BaseScreen {
             star.update(delta);
         }
         explosionPool.updateActiveSprites(delta);
-        if (frags >=20 && state != State.BOSS_FIGHT){
+        if (frags >=10 && bossFightState == false){
             enemyGenerator.generateBoss();
-            state = State.BOSS_FIGHT;
             bossFightState = true;
+        }else if (frags >=31){
+            state = State.LEVEL_COMPLETE;
         }
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.update(delta);
             objectGenerator.generate(delta);
             bulletPool.updateActiveSprites(delta);
@@ -170,19 +188,21 @@ public class GameScreen extends BaseScreen {
             healthpackPool.updateActiveSprites(delta);
             shieldCasePool.updateActiveSprites(delta);
             healthBar.update(delta);
-            if (state != State.BOSS_FIGHT){
+            shieldBar.update(delta);
+            if (bossFightState == false){
                 enemyGenerator.generate(delta);
             }
-            if (shieldState == ShieldState.ENABLED){
+            if (shieldState == true){
                 shield.update(delta);
             }
         } else if (state == State.LEVEL_COMPLETE){
-            game.setScreen(new StatisticScreen(frags, smallFrags, mediumFrags, bigFrags, repairKit));
+            while (delayScreen <= 2f)
+            delayScreen +=delta;
         }
     }
 
     private void checkCollisions() {
-        if (state != State.PLAYING && state != State.BOSS_FIGHT) {
+        if (state != State.PLAYING) {
             return;
         }
         List<EnemyShip> enemyList = enemyShipPool.getActiveObjects();
@@ -226,6 +246,9 @@ public class GameScreen extends BaseScreen {
                                 case BIG:
                                     bigFrags++;
                                     break;
+                                case BOSS:
+                                    state = State.LEVEL_COMPLETE;
+                                    break;
                             }
                             frags = smallFrags + mediumFrags + bigFrags;
                         }
@@ -233,19 +256,19 @@ public class GameScreen extends BaseScreen {
                     }
                 }
             } else {
-                if (shieldState == ShieldState.ENABLED){
+                if (shieldState == true){
                     if (shield.isBulletCollision(bullet)){
                         shield.damage(bullet.getDamage());
                         bullet.destroy();
                         if (shield.isDestroyed()){
-                            shieldState = ShieldState.DISABLED;
+                            shieldState = false;
                         }
                         return;
                     }
                 }else if (mainShip.isBulletCollision(bullet)) {
-                        System.out.println("1 Shieldstate: " + shieldState + "mainShip HP: " + mainShip.getHp());
+                        System.out.println("1 Shieldstate: " + shieldState + " mainShip HP: " + mainShip.getHp());
                         mainShip.damage(bullet.getDamage());
-                        System.out.println("2 Shieldstate: " + shieldState + "mainShip HP: " + mainShip.getHp());
+                        System.out.println("2 Shieldstate: " + shieldState + " mainShip HP: " + mainShip.getHp());
                         if (mainShip.isDestroyed()) {
                             state = State.GAME_OVER;
                         }
@@ -276,9 +299,9 @@ public class GameScreen extends BaseScreen {
                 continue;
             }
             if (shieldCase.isShipCollision(mainShip)){
-                if (shieldState == ShieldState.DISABLED){
+                if (shieldState == false){
                     shield.flushDestroy();
-                    shieldState = ShieldState.ENABLED;
+                    shieldState = true;
                 }
                 shield.setDefaultHp();
                 shield.setPos();
@@ -310,14 +333,15 @@ public class GameScreen extends BaseScreen {
         for (Star star : starList) {
             star.draw(batch);
         }
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.draw(batch);
             bulletPool.drawActiveSprites(batch);
             enemyShipPool.drawActiveSprites(batch);
             healthpackPool.drawActiveSprites(batch);
             shieldCasePool.drawActiveSprites(batch);
             healthBar.draw(batch);
-            if (shieldState == ShieldState.ENABLED){
+            shieldBar.draw(batch);
+            if (shieldState == true){
                 shield.draw(batch);
             }
         }
@@ -326,16 +350,34 @@ public class GameScreen extends BaseScreen {
             gameOver.draw(batch);
             newGame.draw(batch);
         }
+
+        if (state == State.LEVEL_COMPLETE && delayScreen >=2f){
+            printStatistic();
+        }
         explosionPool.drawActiveSprites(batch);
         printInfo();
+
         batch.end();
     }
 
     private void printInfo() {
         sbFrags.setLength(0);
         sbLevel.setLength(0);
-        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getBottom() + 0.05f);
+//        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getBottom() + 0.05f);
         font.draw(batch, sbLevel.append(LEVEL).append(enemyGenerator.getLevel()), worldBounds.getRight(), worldBounds.getTop(), Align.right);
+    }
+
+    private void printStatistic() {
+        sbSmallFrags.setLength(0);
+        sbMediumFrags.setLength(0);
+        sbBigFrags.setLength(0);
+        sbRepairKit.setLength(0);
+
+        font.draw(batch, sbSmallFrags.append(SMALL_FRAGS).append(smallFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.7f, Align.center);
+        font.draw(batch, sbMediumFrags.append(MEDIUM_FRAGS).append(mediumFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.6f, Align.center);
+        font.draw(batch, sbBigFrags.append(BIG_FRAGS).append(bigFrags), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.5f, Align.center);
+        font.draw(batch, sbRepairKit.append(REPAIR_KIT).append(repairKit), worldBounds.getLeft() + worldBounds.getHalfWidth(), worldBounds.getBottom() + 0.4f, Align.center);
+
     }
 
     @Override
@@ -345,9 +387,9 @@ public class GameScreen extends BaseScreen {
         for (Star star : starList) {
             star.resize(worldBounds);
         }
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.resize(worldBounds);
-            if (shieldState == ShieldState.ENABLED){
+            if (shieldState == true){
                 shield.resize(worldBounds);
             }
         }
@@ -360,7 +402,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void pause() {
         super.pause();
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             state = State.PAUSE;
         }
     }
@@ -368,13 +410,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resume() {
         super.resume();
-        if (state == State.PAUSE) {
-            if (bossFightState == false) {
-                state = State.PLAYING;
-            }else {
-                state = State.BOSS_FIGHT;
-            }
-        }
+        state = State.PLAYING;
     }
 
     @Override
@@ -397,7 +433,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.keyDown(keycode);
         }
         return false;
@@ -405,7 +441,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.keyUp(keycode);
         }
         return false;
@@ -413,7 +449,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.touchDown(touch, pointer);
         }
         if (state == State.GAME_OVER){
@@ -424,7 +460,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        if (state == State.PLAYING || state == State.BOSS_FIGHT) {
+        if (state == State.PLAYING) {
             mainShip.touchUp(touch, pointer);
         }
         if (state == State.GAME_OVER){
