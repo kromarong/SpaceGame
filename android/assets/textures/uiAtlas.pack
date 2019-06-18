@@ -1,0 +1,138 @@
+
+uiAtlas.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Stats_Bar
+  rotate: false
+  xy: 1, 361
+  size: 1080, 80
+  orig: 1080, 80
+  offset: 0, 0
+  index: -1
+health0
+  rotate: false
+  xy: 1, 289
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health1
+  rotate: false
+  xy: 1083, 371
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health10
+  rotate: false
+  xy: 1, 217
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health2
+  rotate: false
+  xy: 403, 289
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health3
+  rotate: false
+  xy: 1485, 371
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health4
+  rotate: false
+  xy: 1, 145
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health5
+  rotate: false
+  xy: 403, 217
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health6
+  rotate: false
+  xy: 1, 73
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health7
+  rotate: false
+  xy: 403, 145
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health8
+  rotate: false
+  xy: 1, 1
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+health9
+  rotate: false
+  xy: 403, 73
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+shield0
+  rotate: false
+  xy: 403, 1
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+BonusButton
+  rotate: false
+  xy: 805, 139
+  size: 217, 220
+  orig: 217, 220
+  offset: 0, 0
+  index: -1
+shield1
+  rotate: false
+  xy: 1083, 299
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+shield2
+  rotate: false
+  xy: 1485, 299
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+shield3
+  rotate: false
+  xy: 1024, 227
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+shield4
+  rotate: false
+  xy: 1024, 155
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
+shield5
+  rotate: false
+  xy: 1426, 227
+  size: 400, 70
+  orig: 400, 70
+  offset: 0, 0
+  index: -1
